@@ -4,8 +4,9 @@ namespace PipboyOrganizer.Controllers
 {
     public class SkillController
     {
-        public SkillController()
+        public SkillController(Skill s)
         {
+            skill = s;
         }
 
         public Skill skill

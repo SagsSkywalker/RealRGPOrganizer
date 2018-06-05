@@ -115,6 +115,7 @@
     <Compile Include="Controllers\QuestController.cs" />
     <Compile Include="Controllers\StageController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\EventController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
