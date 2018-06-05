@@ -115,7 +115,6 @@
     <Compile Include="Controllers\QuestController.cs" />
     <Compile Include="Controllers\StageController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-<<<<<<< HEAD
     <Compile Include="SkillViewCell.cs" />
     <Compile Include="SkillViewCell.designer.cs">
       <DependentUpon>SkillViewCell.cs</DependentUpon>
@@ -128,9 +127,6 @@
     <Compile Include="ScheduleViewController.designer.cs">
       <DependentUpon>ScheduleViewController.cs</DependentUpon>
     </Compile>
-=======
-    <Compile Include="Controllers\EventController.cs" />
->>>>>>> Sergio-Desarrollo
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
