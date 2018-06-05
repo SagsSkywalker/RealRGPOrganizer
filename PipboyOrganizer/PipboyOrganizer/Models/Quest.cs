@@ -5,12 +5,6 @@ namespace PipboyOrganizer.Models
 {
     public class Quest
     {
-        public string QuestID
-        {
-            get;
-            set;
-        }
-
         public string Name
         {
             get;
@@ -36,18 +30,6 @@ namespace PipboyOrganizer.Models
         }
 
         public int RewardXP
-        {
-            get;
-            set;
-        }
-
-        public List<Skill> AffectedSkills
-        {
-            get;
-            set;
-        }
-
-        public int SkillPoints
         {
             get;
             set;
