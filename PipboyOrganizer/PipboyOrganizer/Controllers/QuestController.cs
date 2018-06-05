@@ -4,10 +4,8 @@ namespace PipboyOrganizer.Controllers
 {
     public class QuestController
     {
-        public QuestController(Quest q, User u)
+        public QuestController()
         {
-            quest = q;
-            user = u;
         }
 
         public Quest quest
@@ -23,7 +21,7 @@ namespace PipboyOrganizer.Controllers
         }
 
         /// <summary>
-        /// Completes the quest, gives User the reward xp, adds points to Skills and adds it to User Completed Quests.
+        /// Completes the quest, gives User the reward xp and adds it to User Completed Quests.
         /// </summary>
         public void CompleteQuest()
         {
@@ -38,17 +36,7 @@ namespace PipboyOrganizer.Controllers
             {
                 quest.isCompleted = true;
                 user.CompletedQuests.Add(quest);
-                user.Experience += quest.RewardXP;
-                foreach (Skill UserSkill in user.UserSkills)
-                {
-                    foreach (Skill AffectedSkill in quest.AffectedSkills)
-                    {
-                        if (UserSkill == AffectedSkill)
-                        {
-                            UserSkill.Level += quest.SkillPoints;
-                        }
-                    }
-                }
+                //user.Experience += 
             }
         }
 
@@ -60,15 +48,6 @@ namespace PipboyOrganizer.Controllers
             if(quest.ExpiringDate.CompareTo(DateTime.Now) <= 0){
                 quest.Status = false;
                 user.CompletedQuests.Add(quest);
-                foreach (Skill UserSkill in user.UserSkills)
-                {
-                    foreach (Skill AffectedSkill in quest.AffectedSkills)
-                    {
-                        if(UserSkill == AffectedSkill){
-                            UserSkill.Level -= quest.SkillPoints;
-                        }
-                    }
-                }
                 return true;
             }
             return false;
@@ -79,13 +58,6 @@ namespace PipboyOrganizer.Controllers
         /// </summary>
         public void CreateQuest(){
             user.ActiveQuests.Add(quest);
-        }
-
-        /// <summary>
-        /// Cancels the quest, removes it from Active Quest List.
-        /// </summary>
-        public void CancelQuest(){
-            user.ActiveQuests.Remove(quest);
         }
     }
 }

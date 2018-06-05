@@ -4,9 +4,8 @@ namespace PipboyOrganizer.Controllers
 {
     public class StageController
     {
-        public StageController(Stage s)
+        public StageController()
         {
-            stage = s;
         }
 
         public Stage stage
