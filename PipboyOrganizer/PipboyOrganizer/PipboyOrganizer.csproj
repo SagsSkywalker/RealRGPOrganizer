@@ -115,6 +115,18 @@
     <Compile Include="Controllers\QuestController.cs" />
     <Compile Include="Controllers\StageController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="SkillViewCell.cs" />
+    <Compile Include="SkillViewCell.designer.cs">
+      <DependentUpon>SkillViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="QuestViewController.cs" />
+    <Compile Include="QuestViewController.designer.cs">
+      <DependentUpon>QuestViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ScheduleViewController.cs" />
+    <Compile Include="ScheduleViewController.designer.cs">
+      <DependentUpon>ScheduleViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

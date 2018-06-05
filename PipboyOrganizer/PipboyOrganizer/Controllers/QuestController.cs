@@ -36,7 +36,7 @@ namespace PipboyOrganizer.Controllers
             {
                 quest.isCompleted = true;
                 user.CompletedQuests.Add(quest);
-                user.Experience += 
+                //user.Experience += 
             }
         }
 
