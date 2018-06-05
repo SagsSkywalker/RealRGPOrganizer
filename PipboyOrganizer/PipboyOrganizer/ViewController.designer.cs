@@ -5,7 +5,7 @@
 //
 using Foundation;
 
-namespace RealRPGOrganizer
+namespace PipboyOrganizer
 {
     [Register("ViewController")]
     partial class ViewController

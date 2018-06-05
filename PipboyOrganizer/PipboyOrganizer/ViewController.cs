@@ -2,7 +2,7 @@
 
 using UIKit;
 
-namespace RealRPGOrganizer
+namespace PipboyOrganizer
 {
     public partial class ViewController : UIViewController
     {

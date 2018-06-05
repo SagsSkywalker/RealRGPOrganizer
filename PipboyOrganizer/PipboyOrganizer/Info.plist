@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleName</key>
-	<string>RealRPGOrganizer</string>
+	<string>PipboyOrganizer</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.skywalker.RealRPGOrganizer</string>
+	<string>com.skywaker.PipboyOrganizer</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
