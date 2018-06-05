@@ -128,7 +128,6 @@
     <Compile Include="ScheduleViewController.designer.cs">
       <DependentUpon>ScheduleViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\EventController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

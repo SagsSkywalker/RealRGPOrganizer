@@ -4,6 +4,8 @@ namespace PipboyOrganizer.Controllers
 {
     public class UserController
     {
+        //Un comentario chidori
+
         public UserController(User u)
         {
             user = u;
