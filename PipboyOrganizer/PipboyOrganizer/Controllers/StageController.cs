@@ -21,5 +21,15 @@ namespace PipboyOrganizer.Controllers
         public void CompleteStage(){
             stage.isCompleted = true;
         }
+
+        /// <summary>
+        /// Checks if stage is completed.
+        /// </summary>
+        /// <returns><c>true</c>, if completed was given, <c>false</c> if is not.</returns>
+        public bool isCompleted(){
+            if (stage.isCompleted)
+                return true;
+            return false;
+        }
     }
 }

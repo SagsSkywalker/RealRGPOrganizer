@@ -90,6 +90,7 @@
     <Folder Include="Resources\" />
     <Folder Include="Models\" />
     <Folder Include="Controllers\" />
+    <Folder Include="Data Access\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />

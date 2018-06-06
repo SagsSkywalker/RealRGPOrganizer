@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using PipboyOrganizer.Models;
 namespace PipboyOrganizer.Controllers
 {
@@ -20,6 +21,24 @@ namespace PipboyOrganizer.Controllers
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// Gets the active quests.
+        /// </summary>
+        /// <returns>The active quests.</returns>
+        /// <param name="u">User whom to retrieve quests</param>
+        public List<Quest> GetActiveQuests(User u){
+            return u.ActiveQuests;
+        }
+
+        /// <summary>
+        /// Gets the completed quests.
+        /// </summary>
+        /// <returns>The completed quests.</returns>
+        /// <param name="u">User whom to retrieve quests</param>
+        public List<Quest> GetCompletedQuests(User u){
+            return u.CompletedQuests;
         }
 
         /// <summary>
