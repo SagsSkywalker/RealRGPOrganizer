@@ -115,7 +115,6 @@
     <Compile Include="Controllers\QuestController.cs" />
     <Compile Include="Controllers\StageController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-    <Compile Include="Controllers\EventController.cs" />
     <Compile Include="SkillViewCell.cs" />
     <Compile Include="SkillViewCell.designer.cs">
       <DependentUpon>SkillViewCell.cs</DependentUpon>
