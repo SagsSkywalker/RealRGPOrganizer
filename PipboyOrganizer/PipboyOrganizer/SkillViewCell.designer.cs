@@ -12,9 +12,23 @@ namespace PipboyOrganizer
 	[Register ("SkillViewCell")]
 	partial class SkillViewCell
 	{
+		[Outlet]
+		UIKit.UILabel LblSkillLevel { get; set; }
+
+		[Outlet]
+		UIKit.UILabel LblSkillName { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (LblSkillName != null) {
+				LblSkillName.Dispose ();
+				LblSkillName = null;
+			}
+
+			if (LblSkillLevel != null) {
+				LblSkillLevel.Dispose ();
+				LblSkillLevel = null;
+			}
 		}
 	}
 }
