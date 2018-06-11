@@ -128,6 +128,14 @@
     <Compile Include="ScheduleViewController.designer.cs">
       <DependentUpon>ScheduleViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="MainTableViewCell.cs" />
+    <Compile Include="MainTableViewCell.designer.cs">
+      <DependentUpon>MainTableViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InsideTableViewCell.cs" />
+    <Compile Include="InsideTableViewCell.designer.cs">
+      <DependentUpon>InsideTableViewCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

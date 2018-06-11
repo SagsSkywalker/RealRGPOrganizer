@@ -7,10 +7,53 @@ using UIKit;
 
 namespace PipboyOrganizer
 {
-	public partial class QuestViewController : UIViewController
+    public partial class QuestViewController : UIViewController,IUITableViewDelegate,IUITableViewDataSource
 	{
+        
 		public QuestViewController (IntPtr handle) : base (handle)
 		{
+            
 		}
+
+
+        public UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
+        {
+            if (tableView.Tag == 10)
+            {
+                var cell = tableView.DequeueReusableCell("MainTableViewCell", indexPath) as MainTableViewCell;
+                cell.QuestName = "Programming";
+                cell.QuestDescription = "Coding";
+                tableView.RowHeight = 400;
+                return cell;
+            }
+            else if(tableView.Tag == 20)
+            {
+                var cell = tableView.DequeueReusableCell("InsideTableViewCell", indexPath) as InsideTableViewCell;
+                cell.Task = "Do the ios Project";
+                tableView.RowHeight = 100;
+                tableView.EstimatedRowHeight = 50;
+                return cell;
+            }
+
+            return null;
+
+        }
+
+
+        public nint RowsInSection(UITableView tableView, nint section)
+        {
+            if (tableView.Tag == 10)
+            {
+                return 1;
+            }
+            else if (tableView.Tag == 20)
+            {
+                return 3;
+            }
+            return 1;
+        }
+
+
+
 	}
 }
