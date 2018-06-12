@@ -124,6 +124,7 @@
                         <outlet property="ImgUser" destination="g5l-qo-Ad8" id="R1V-lo-9Nh"/>
                         <outlet property="LblUserLevel" destination="O8k-Px-kiC" id="wiv-Ke-hMi"/>
                         <outlet property="LblUserName" destination="N1z-4L-tvr" id="hbY-Zr-6mx"/>
+                        <outlet property="cvSkills" destination="y65-mQ-PNg" id="UQQ-Q1-DD3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

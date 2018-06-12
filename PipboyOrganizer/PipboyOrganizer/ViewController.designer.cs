@@ -13,6 +13,9 @@ namespace PipboyOrganizer
 	partial class ViewController
 	{
 		[Outlet]
+		UIKit.UICollectionView cvSkills { get; set; }
+
+		[Outlet]
 		UIKit.UIImageView ImgUser { get; set; }
 
 		[Outlet]
@@ -28,14 +31,19 @@ namespace PipboyOrganizer
 				ImgUser = null;
 			}
 
+			if (LblUserLevel != null) {
+				LblUserLevel.Dispose ();
+				LblUserLevel = null;
+			}
+
 			if (LblUserName != null) {
 				LblUserName.Dispose ();
 				LblUserName = null;
 			}
 
-			if (LblUserLevel != null) {
-				LblUserLevel.Dispose ();
-				LblUserLevel = null;
+			if (cvSkills != null) {
+				cvSkills.Dispose ();
+				cvSkills = null;
 			}
 		}
 	}
