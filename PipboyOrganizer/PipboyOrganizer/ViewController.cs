@@ -1,10 +1,12 @@
 ﻿using System;
 
 using UIKit;
+using Foundation;
 
 using PipboyOrganizer.Controllers;
 using PipboyOrganizer.Models;
 using System.Collections.Generic;
+using Firebase.Database;
 
 namespace PipboyOrganizer
 {
@@ -24,6 +26,29 @@ namespace PipboyOrganizer
             base.ViewDidLoad();
             // Perform any additional setup after loading the view, typically from a nib.
 
+            DatabaseReference rootNode = Database.DefaultInstance.GetRootReference();
+            DatabaseReference userNode = rootNode.GetChild("Users").GetChild("User");
+            //Read data from Firebase node
+            //nuint experience;
+            //userNode.GetChild("Experience").ObserveSingleEvent(DataEventType.Value, (snapshot) => {
+            //    experience = snapshot.GetValue<NSNumber>().NUIntValue;
+            //    Console.WriteLine(experience);
+            //}, (error) => {
+            //    Console.WriteLine(error.LocalizedDescription);
+            //});
+
+            //Write data to a Firebase node
+            //nuint experience = 190001;
+            //userNode.GetChild("Experience").SetValue<NSNumber>(NSNumber.FromNUInt(experience));
+
+            NSDictionary quests;
+            userNode.GetChild("ActiveQuests").ObserveSingleEvent(DataEventType.Value, (snapshot) => {
+                snapshot.
+                Console.WriteLine(experience);
+                
+            }, (error) => {
+                Console.WriteLine(error.LocalizedDescription);
+            });
         }
 
         public override void DidReceiveMemoryWarning()

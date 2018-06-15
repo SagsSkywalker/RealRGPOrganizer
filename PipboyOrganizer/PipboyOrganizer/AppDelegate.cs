@@ -1,5 +1,6 @@
 ﻿using Foundation;
 using UIKit;
+using Firebase.Core;
 
 namespace PipboyOrganizer
 {
@@ -20,7 +21,7 @@ namespace PipboyOrganizer
         {
             // Override point for customization after application launch.
             // If not required for your application you can safely delete this method
-
+            App.Configure();
             return true;
         }
 
