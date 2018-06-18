@@ -29,9 +29,12 @@ namespace PipboyOrganizer
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            UpdateUserData();
             // Perform any additional setup after loading the view, typically from a nib.
             LoadUserData();
             AddNewQuest();
+            //LoadQuestData();
+            AddNewSkill();
         }
 
         public override void DidReceiveMemoryWarning()
@@ -40,36 +43,10 @@ namespace PipboyOrganizer
             // Release any cached data, images, etc that aren't in use.
         }
 
-        public void Initialize(){
-            //Load User from Firebase
-            //In the meantime we create new user
-            User user = new User()
-            {
-                Username = "Skywalker",
-                UserLevel = 1,
-                Experience = 0,
-                UserSkills = new List<Skill>(){
-                    new Skill(){
-                        Name = "Lightsaber Combat",
-                        Description = "The proper ways to use a lightsaber",
-                        Level = 1
-                    },
-                    new Skill(){
-                        Name = "Droid Repair",
-                        Description = "Bleeep",
-                        Level = 1
-                    }
-                }
-            };
-            uc = new UserController(user);
-            qc = new QuestController();
-            sc = new SkillController();
-        }
-
         public void LoadUserData(){
             DatabaseReference rootNode = Database.DefaultInstance.GetRootReference();
             DatabaseReference userNode = rootNode.GetChild("Users").GetChild("User");
-
+            NSDictionary refe;
             myUser = new User();
             userNode.ObserveSingleEvent(DataEventType.Value, (snapshot) =>
             {
@@ -81,7 +58,7 @@ namespace PipboyOrganizer
                 LblUserName.Text = data.ValueForKey(new NSString("Username")).ToString();
                 //User Skills
                 var skills = data.ValueForKey(new NSString("UserSkills"));
-                cvSkills.DataSource = skills as IUICollectionViewDataSource;
+                refe = data;
             }, (error) =>
             {
                 Console.WriteLine(error.LocalizedDescription);
@@ -90,56 +67,121 @@ namespace PipboyOrganizer
         }
 
         public void AddNewQuest(){
-            Quest quest = new Quest()
-            {
-                Name = "Cleansing the Commonwealth",
-                Description = "Knight Farias asked you to kill feral ghouls",
-                isCompleted = false,
-                RewardXP = 500,
-                StartDate = new DateTime(2018, 6, 17, 19, 10, 20),
-                ExpiringDate = new DateTime(2018, 7, 17, 19, 10, 20),
-                Status = true,
-                QuestStages = new List<Stage>(){
-                    new Stage(){
-                        IDStage = 1,
-                        Description = "Kill ferals in Cambridge Police Station",
-                        isCompleted = false
-                    },
-                    new Stage(){
-                        IDStage = 2,
-                        Description = "Kill ferals in Sanctuary",
-                        isCompleted = false
-                    }
-                }
-            };
+            //Quest Keys
+            object[] questCreatedKeys = { "Description", "ExpiringDate", "Name", "QuestStages", "RewardXP", "StartDate", "Status", "isCompleted" };
+            //Stage Keys
+            object[] questStage1Keys = { "Description", "StageID", "isCompleted" };
+            //Stage Values
+            object[] questStage1 = { "Kill ferals in Cambridge Police Station", "1", "false" };
+            //Stage NSDictionary creation
+            var qs1 = NSDictionary.FromObjectsAndKeys(questStage1, questStage1Keys, questStage1Keys.Length);
 
-            //object[] questCreated = { "Quest02" };
+            object[] questStage2Keys = { "Description", "StageID", "isCompleted" };
+            object[] questStage2 = { "Kill ferals in Sanctuary", "2", "false" };
+            var qs2 = NSDictionary.FromObjectsAndKeys(questStage2, questStage2Keys, questStage2Keys.Length);
 
-            //object[] questCreatedKeys = { "Description", "ExpiringDate", "Name", "QuestStages", "RewardXP", "StartDate", "Status", "isCompleted" };
-
-            //object[] questStage1Keys = { "Description", "StageID", "isCompleted" };
-            //object[] questStage1 = { "Kill ferals in Cambridge Police Station", "1", "false" };
-            //var qs1 = NSDictionary.FromObjectsAndKeys(questStage1, questStage1Keys, questStage1Keys.Length);
-
-            //object[] questStage2Keys = { "Description", "StageID", "isCompleted" };
-            //object[] questStage2 = { "Kill ferals in Sanctuary", "2", "false" };
-            //var qs2 = NSDictionary.FromObjectsAndKeys(questStage2, questStage2Keys, questStage2Keys.Length);
-
-            //object[] questStagesValues = { qs1, qs2 };
-
-            //object[] questCreatedValues = { "Knight Farias asked you to kill feral ghouls", "2018/7/17 19:10:20", "Cleansing the Commonwealth", questStagesValues, "500", "2018/6/17 19:10:20", "true", "false" };
-
-            //object[] questValues = { questCreatedValues };
-
-            //var questCreatedFinal = NSDictionary.FromObjectsAndKeys(questValues, questCreatedKeys);
-
-            object[] keys = { "Test" };
-            object[] values = { "I dont know anymore" };
-            var data = NSDictionary.FromObjectsAndKeys(values, keys, keys.Length);
+            //Quest Values
+            object[] questCreatedValues = { "Knight Farias asked you to kill feral ghouls", "2018/7/17 19:10:20", "Cleansing the Commonwealth", "", 500, "2018/6/17 19:10:20", "true", "false" };
+            //Quest NSDictionary creation
+            var questCreatedFinal = NSDictionary.FromObjectsAndKeys(questCreatedValues, questCreatedKeys, questCreatedKeys.Length);
 
             DatabaseReference rootNode = Database.DefaultInstance.GetRootReference();
             DatabaseReference userNode = rootNode.GetChild("Users").GetChild("User");
-            userNode.GetChild("ActiveQuests").SetValue<NSDictionary>(data);
+            //Create quest node and add Quest data.
+            userNode.GetChild("ActiveQuests").GetChild("Quest01").SetValue<NSDictionary>(questCreatedFinal);
+            //Create stage node and add Stage data.
+            userNode.GetChild("ActiveQuests").GetChild("Quest01").GetChild("QuestStages").GetChild("Stage01").SetValue<NSDictionary>(qs1);
+            userNode.GetChild("ActiveQuests").GetChild("Quest01").GetChild("QuestStages").GetChild("Stage02").SetValue<NSDictionary>(qs2);
+        }
+
+        public void AddNewSkill(){
+            //Skill keys
+            object[] skillKeys = { "Description", "Level", "Name" };
+            //Skill values
+            object[] skillValues = { "Ability to repair artifacts", 45, "Repair" };
+            //Skill NSDictionary creation
+            var sk = NSDictionary.FromObjectsAndKeys(skillValues, skillKeys, skillKeys.Length);
+
+            DatabaseReference skillsNode = Database.DefaultInstance.GetRootReference().GetChild("Users").GetChild("User").GetChild("UserSkills");
+            skillsNode.GetChild("Skill03").SetValue<NSDictionary>(sk);
+        }
+
+        public void UpdateUserData(){
+            //We need a User as a parameter to update data in Firebase
+            User user = new User()
+            {
+                Username = "SagsSkywalker",
+                Experience = 200000,
+                UserLevel = 20
+            };
+            DatabaseReference userNode = Database.DefaultInstance.GetRootReference().GetChild("Users").GetChild("User");
+            userNode.GetChild("Username").SetValue<NSString>(new NSString(user.Username));
+            userNode.GetChild("Experience").SetValue<NSNumber>(new NSNumber(user.Experience));
+            userNode.GetChild("UserLevel").SetValue<NSNumber>(new NSNumber(user.UserLevel));
+        }
+
+        public void LoadQuestData(){
+            //We need a parameter for the QuestID for this is Quest01
+            string questNodeParam = "Quest01";
+            //Prepare Firebase access
+            DatabaseReference rootNode = Database.DefaultInstance.GetRootReference();
+            DatabaseReference userNode = rootNode.GetChild("Users").GetChild("User");
+            DatabaseReference questNode = userNode.GetChild("ActiveQuests").GetChild(questNodeParam);
+            //Prepare stages node using QuestID parameter
+            DatabaseReference stagesNode = questNode.GetChild("QuestStages");
+
+            stagesNode.ObserveSingleEvent(DataEventType.Value, (snapshot) =>
+            {
+                //Create stages list
+                List<Stage> stages = new List<Stage>();
+                var stagesData = snapshot.GetValue<NSDictionary>().Values;
+                int c = 0;
+                foreach (var stage in stagesData)
+                {
+                    Stage tStage = new Stage();
+                    tStage.IDStage = c++;
+                    tStage.Description = stage.ValueForKey(new NSString("Description")).ToString();
+                    tStage.isCompleted = (stage.ValueForKey(new NSString("isCompleted")).ToString() == "true");
+                    stages.Add(tStage);
+                }
+                //Create Quest
+                Quest quest = new Quest();
+                questNode.ObserveSingleEvent(DataEventType.Value, (snapshot2) =>
+                {
+                    var questData = snapshot2.GetValue<NSDictionary>().Values;
+                    foreach (var node in questData)
+                    {
+                        quest.Name = node.ValueForKey(new NSString("Name")).ToString();
+                        quest.Description = node.ValueForKey(new NSString("Description")).ToString();
+                        quest.RewardXP = int.Parse(node.ValueForKey(new NSString("RewardXP")).ToString());
+                        quest.StartDate = DateTime.Parse(node.ValueForKey(new NSString("StartDate")).ToString());
+                        quest.ExpiringDate = DateTime.Parse(node.ValueForKey(new NSString("ExpiringDate")).ToString());
+                        quest.isCompleted = (node.ValueForKey(new NSString("isCompleted")).ToString() == "true");
+                        quest.Status = (node.ValueForKey(new NSString("Status")).ToString() == "true");
+                    }
+                    quest.QuestStages = stages;
+
+                    //Do whatever with this quest.
+                    //TODO: Display on table.
+                    Console.WriteLine(quest);
+
+                }, (err) =>
+                {
+                    Console.WriteLine(err.LocalizedDescription);
+                });
+            }, (error) =>
+            {
+                Console.WriteLine(error.LocalizedDescription);
+            });
+        }
+
+
+        public void LoadAllQuests(){
+            //Prepare Firebase access
+            DatabaseReference rootNode = Database.DefaultInstance.GetRootReference();
+            DatabaseReference userNode = rootNode.GetChild("Users").GetChild("User");
+
+
         }
     }
 }
