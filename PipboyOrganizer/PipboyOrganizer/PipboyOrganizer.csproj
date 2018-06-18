@@ -152,6 +152,14 @@
     <Compile Include="InsideTableViewCell.designer.cs">
       <DependentUpon>InsideTableViewCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="StageViewCell.cs" />
+    <Compile Include="StageViewCell.designer.cs">
+      <DependentUpon>StageViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AddQuestViewController.cs" />
+    <Compile Include="AddQuestViewController.designer.cs">
+      <DependentUpon>AddQuestViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />

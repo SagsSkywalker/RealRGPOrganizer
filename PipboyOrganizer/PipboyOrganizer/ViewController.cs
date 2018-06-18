@@ -43,8 +43,8 @@ namespace PipboyOrganizer
 
             NSDictionary quests;
             userNode.GetChild("ActiveQuests").ObserveSingleEvent(DataEventType.Value, (snapshot) => {
-                snapshot.
-                Console.WriteLine(experience);
+                
+                Console.WriteLine(snapshot);
                 
             }, (error) => {
                 Console.WriteLine(error.LocalizedDescription);
