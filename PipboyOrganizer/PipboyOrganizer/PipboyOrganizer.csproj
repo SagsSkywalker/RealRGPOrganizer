@@ -152,6 +152,7 @@
     <Compile Include="InsideTableViewCell.designer.cs">
       <DependentUpon>InsideTableViewCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Data Access\FirebaseManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />
