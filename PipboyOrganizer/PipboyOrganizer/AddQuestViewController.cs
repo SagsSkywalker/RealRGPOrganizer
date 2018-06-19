@@ -18,28 +18,28 @@ namespace PipboyOrganizer
 
 		public AddQuestViewController (IntPtr handle) : base (handle)
 		{
-            
+
 		}
 
-        public UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
-        {
-            var cell = tableView.DequeueReusableCell("StageViewCell", indexPath)as StageViewCell;
-            cell.StageDescription = stages[indexPath.Row].Description;
-            return cell;
-        }
+		public UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
+		{
+			var cell = tableView.DequeueReusableCell ("StageViewCell", indexPath) as StageViewCell;
+			cell.StageDescription = stages [indexPath.Row].Description;
+			return cell;
+		}
 
-        public nint RowsInSection(UITableView tableView, nint section)
-        {
-            return stages.Count;
-        }
-        private void AddStage()
-        {
-            InvokeOnMainThread(() =>
-            {
-                Stage stage = new Stage();
-                stage.Description = TxtQuestStage.Text;
-                stage.isCompleted = false;
-                stages.Add(stage);
+		public nint RowsInSection (UITableView tableView, nint section)
+		{
+			return stages.Count;
+		}
+		private void AddStage ()
+		{
+			InvokeOnMainThread (() =>
+			{
+				Stage stage = new Stage ();
+				stage.Description = TxtQuestStage.Text;
+				stage.isCompleted = false;
+				stages.Add (stage);
 
                 tblStages.ReloadData();
             });

@@ -237,8 +237,8 @@
                                                                                 <rect key="frame" x="0.0" y="0.0" width="345" height="108.5"/>
                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                                 <subviews>
-                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Task" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vsB-vv-EiI">
-                                                                                        <rect key="frame" x="15" y="27" width="330" height="28"/>
+                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Task" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vsB-vv-EiI">
+                                                                                        <rect key="frame" x="14" y="-9" width="331" height="41"/>
                                                                                         <fontDescription key="fontDescription" name="PingFangTC-Ultralight" family="PingFang TC" pointSize="17"/>
                                                                                         <nil key="textColor"/>
                                                                                         <nil key="highlightedColor"/>
@@ -248,6 +248,7 @@
                                                                                     <constraint firstItem="vsB-vv-EiI" firstAttribute="leading" secondItem="rBj-pK-wz8" secondAttribute="leadingMargin" constant="-1" id="0GZ-k8-bRl"/>
                                                                                     <constraint firstItem="vsB-vv-EiI" firstAttribute="top" secondItem="rBj-pK-wz8" secondAttribute="topMargin" constant="-20" id="9G2-9w-t9C"/>
                                                                                     <constraint firstAttribute="trailing" secondItem="vsB-vv-EiI" secondAttribute="trailing" id="9Ww-hS-Fr4"/>
+                                                                                    <constraint firstAttribute="trailing" secondItem="vsB-vv-EiI" secondAttribute="trailing" id="Jrh-Vl-5dO"/>
                                                                                     <constraint firstAttribute="bottomMargin" secondItem="vsB-vv-EiI" secondAttribute="bottom" constant="66" id="V0F-si-TkZ"/>
                                                                                 </constraints>
                                                                             </tableViewCellContentView>
