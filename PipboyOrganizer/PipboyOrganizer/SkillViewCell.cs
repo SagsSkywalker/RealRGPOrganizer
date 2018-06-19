@@ -9,7 +9,23 @@ namespace PipboyOrganizer
 {
 	public partial class SkillViewCell : UICollectionViewCell
 	{
-		public SkillViewCell (IntPtr handle) : base (handle)
+        public string Name
+        {
+            get=> LblSkillName.Text;
+            set=> LblSkillName.Text = value;
+        }
+        public string SkillDescription
+        {
+            get => LblDescription.Text;
+            set => LblDescription.Text = value;
+        }
+
+        public string Level
+        {
+            get => LblSkillLevel.Text;
+            set => LblSkillLevel.Text = value;
+        }
+        public SkillViewCell (IntPtr handle) : base (handle)
 		{
 		}
 	}

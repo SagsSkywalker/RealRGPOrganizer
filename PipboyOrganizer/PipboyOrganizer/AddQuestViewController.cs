@@ -14,7 +14,7 @@ namespace PipboyOrganizer
 	{
         List<Stage> stages = new List<Stage>();
         FirebaseManager fb = new FirebaseManager();
-        Quest quest = new Quest();
+        Quest quest;
 
 		public AddQuestViewController (IntPtr handle) : base (handle)
 		{
@@ -51,6 +51,7 @@ namespace PipboyOrganizer
 
         partial void BtnAddQuest(NSObject sender)
         {
+            quest = new Quest();
             NSDateFormatter formatter = new NSDateFormatter();
             formatter.DateFormat = "yyyy/MM/dd hh:mm:ss";
             var fecha = formatter.ToString(DpExpiringDate.Date);

@@ -11,7 +11,7 @@ using PipboyOrganizer.DataAccess;
 
 namespace PipboyOrganizer
 {
-    public partial class ViewController : UIViewController
+    public partial class ViewController : UIViewController, IUICollectionViewDelegate, IUICollectionViewDataSource
     {
         public static UserController uc;
         public static QuestController qc;
@@ -29,12 +29,11 @@ namespace PipboyOrganizer
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            UpdateUserData();
+            InitializeComponents();
             // Perform any additional setup after loading the view, typically from a nib.
-            LoadUserData();
-            AddNewQuest();
-            //LoadQuestData();
-            AddNewSkill();
+            //db.LoadUserData();
+
+            Console.WriteLine(myUser);
         }
 
         public override void DidReceiveMemoryWarning()
@@ -43,81 +42,30 @@ namespace PipboyOrganizer
             // Release any cached data, images, etc that aren't in use.
         }
 
-        public void LoadUserData(){
-            DatabaseReference rootNode = Database.DefaultInstance.GetRootReference();
-            DatabaseReference userNode = rootNode.GetChild("Users").GetChild("User");
-            NSDictionary refe;
+        public void InitializeComponents(){
+            cvSkills.DataSource = this;
+            cvSkills.Delegate = this;
             myUser = new User();
-            userNode.ObserveSingleEvent(DataEventType.Value, (snapshot) =>
-            {
-                //Read whole User data and save in data variable.
-                var data = snapshot.GetValue<NSDictionary>();
-                //Read userlevel and assign value to label
-                LblUserLevel.Text = data.ValueForKey(new NSString("UserLevel")).ToString();
-                //Username
-                LblUserName.Text = data.ValueForKey(new NSString("Username")).ToString();
-                //User Skills
-                var skills = data.ValueForKey(new NSString("UserSkills"));
-                refe = data;
-            }, (error) =>
-            {
-                Console.WriteLine(error.LocalizedDescription);
-            });
+            FirebaseManager.SharedInstance.UserDataLoaded += FirebaseManager_UserDataLoaded;
+            FirebaseManager.SharedInstance.SkillsDataLoaded += FirebaseManager_SkillsDataLoaded;
+            FirebaseManager.SharedInstance.LoadUserData();
+
 
         }
 
-        public void AddNewQuest(){
-            //Quest Keys
-            object[] questCreatedKeys = { "Description", "ExpiringDate", "Name", "QuestStages", "RewardXP", "StartDate", "Status", "isCompleted" };
-            //Stage Keys
-            object[] questStage1Keys = { "Description", "StageID", "isCompleted" };
-            //Stage Values
-            object[] questStage1 = { "Kill ferals in Cambridge Police Station", "1", "false" };
-            //Stage NSDictionary creation
-            var qs1 = NSDictionary.FromObjectsAndKeys(questStage1, questStage1Keys, questStage1Keys.Length);
-
-            object[] questStage2Keys = { "Description", "StageID", "isCompleted" };
-            object[] questStage2 = { "Kill ferals in Sanctuary", "2", "false" };
-            var qs2 = NSDictionary.FromObjectsAndKeys(questStage2, questStage2Keys, questStage2Keys.Length);
-
-            //Quest Values
-            object[] questCreatedValues = { "Knight Farias asked you to kill feral ghouls", "2018/7/17 19:10:20", "Cleansing the Commonwealth", "", 500, "2018/6/17 19:10:20", "true", "false" };
-            //Quest NSDictionary creation
-            var questCreatedFinal = NSDictionary.FromObjectsAndKeys(questCreatedValues, questCreatedKeys, questCreatedKeys.Length);
-
-            DatabaseReference rootNode = Database.DefaultInstance.GetRootReference();
-            DatabaseReference userNode = rootNode.GetChild("Users").GetChild("User");
-            //Create quest node and add Quest data.
-            userNode.GetChild("ActiveQuests").GetChild("Quest01").SetValue<NSDictionary>(questCreatedFinal);
-            //Create stage node and add Stage data.
-            userNode.GetChild("ActiveQuests").GetChild("Quest01").GetChild("QuestStages").GetChild("Stage01").SetValue<NSDictionary>(qs1);
-            userNode.GetChild("ActiveQuests").GetChild("Quest01").GetChild("QuestStages").GetChild("Stage02").SetValue<NSDictionary>(qs2);
+        private void FirebaseManager_SkillsDataLoaded(object sender, SkillsDataLoadedEvent e)
+        {
+            myUser.UserSkills = e.skills;
+            cvSkills.ReloadData();
         }
 
-        public void AddNewSkill(){
-            //Skill keys
-            object[] skillKeys = { "Description", "Level", "Name" };
-            //Skill values
-            object[] skillValues = { "Ability to repair artifacts", 45, "Repair" };
-            //Skill NSDictionary creation
-            var sk = NSDictionary.FromObjectsAndKeys(skillValues, skillKeys, skillKeys.Length);
-
-            DatabaseReference skillsNode = Database.DefaultInstance.GetRootReference().GetChild("Users").GetChild("User").GetChild("UserSkills");
-            skillsNode.GetChild("Skill03").SetValue<NSDictionary>(sk);
-        }
-
-        public void UpdateUserData(){
-            //We need a User as a parameter to update data in Firebase
-            User user = new User()
-            {
-                Username = "SagsSkywalker",
-                Experience = 200000,
-                UserLevel = 20
-            };
-            DatabaseReference userNode = Database.DefaultInstance.GetRootReference().GetChild("Users").GetChild("User");
-            userNode.GetChild("Username").SetValue<NSString>(new NSString(user.Username));
-            userNode.GetChild("Experience").SetValue<NSNumber>(new NSNumber(user.Experience));
-            userNode.GetChild("UserLevel").SetValue<NSNumber>(new NSNumber(user.UserLevel));
+        void FirebaseManager_UserDataLoaded(object sender, UserDataLoadedEvent e)
+        {
+            //myUser = new User();
+            myUser = e.user;
+            LblUserName.Text = myUser.Username;
+            LblUserLevel.Text = myUser.UserLevel.ToString();
+            FirebaseManager.SharedInstance.LoadUserSkills();
         }
 
         public void LoadQuestData(){
@@ -182,6 +130,27 @@ namespace PipboyOrganizer
             DatabaseReference userNode = rootNode.GetChild("Users").GetChild("User");
 
 
+        }
+
+        [Export("numberOfSectionsInCollectionView:")]
+        public nint NumberOfSections(UICollectionView collectionView)
+        {
+            return 1;
+        }
+
+        public nint GetItemsCount(UICollectionView collectionView, nint section)
+        {
+            return myUser?.UserSkills == null ? 0 : 3;
+            //return 3;
+        }
+
+        public UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
+        {
+            var cell = collectionView.DequeueReusableCell(nameof(SkillViewCell), indexPath) as SkillViewCell;
+            cell.Name = myUser.UserSkills[indexPath.Row].Name;
+            cell.SkillDescription = myUser.UserSkills[indexPath.Row].Description;
+            cell.Level = myUser.UserSkills[indexPath.Row].Level.ToString();
+            return cell;
         }
     }
 }

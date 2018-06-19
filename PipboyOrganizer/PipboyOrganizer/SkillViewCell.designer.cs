@@ -13,6 +13,9 @@ namespace PipboyOrganizer
 	partial class SkillViewCell
 	{
 		[Outlet]
+		UIKit.UILabel LblDescription { get; set; }
+
+		[Outlet]
 		UIKit.UILabel LblSkillLevel { get; set; }
 
 		[Outlet]
@@ -20,14 +23,19 @@ namespace PipboyOrganizer
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (LblSkillLevel != null) {
+				LblSkillLevel.Dispose ();
+				LblSkillLevel = null;
+			}
+
 			if (LblSkillName != null) {
 				LblSkillName.Dispose ();
 				LblSkillName = null;
 			}
 
-			if (LblSkillLevel != null) {
-				LblSkillLevel.Dispose ();
-				LblSkillLevel = null;
+			if (LblDescription != null) {
+				LblDescription.Dispose ();
+				LblDescription = null;
 			}
 		}
 	}

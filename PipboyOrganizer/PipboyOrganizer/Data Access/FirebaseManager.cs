@@ -15,6 +15,13 @@ namespace PipboyOrganizer.DataAccess
 
         //public event EventHandler<TweetsFetchedEventArgs> TweetsFetched;
         //public event EventHandler<TweetsFetchedFailedEventArgs> FailedTweetsFetched;
+
+        static readonly Lazy<FirebaseManager> lazy = new Lazy<FirebaseManager>(() => new FirebaseManager());
+        public static FirebaseManager SharedInstance { get => lazy.Value; }
+
+        public event EventHandler<QuestDataLoadedEvent> QuestDataLoaded;
+        public event EventHandler<UserDataLoadedEvent> UserDataLoaded;
+        public event EventHandler<SkillsDataLoadedEvent> SkillsDataLoaded;
         #endregion
 
         public FirebaseManager()
@@ -22,7 +29,45 @@ namespace PipboyOrganizer.DataAccess
         }
 
         #region Read Data Methods
+        public void LoadUserData()
+        {
+            userNode.ObserveSingleEvent(DataEventType.Value, (snapshot) =>
+            {
+                User userResponse = new User();
+                //Read whole User data and save in data variable.
+                var data = snapshot.GetValue<NSDictionary>();
+                userResponse.UserLevel = int.Parse(data.ValueForKey(new NSString("UserLevel")).ToString());
+                userResponse.Username = data.ValueForKey(new NSString("Username")).ToString();
+                userResponse.Experience = int.Parse(data.ValueForKey(new NSString("Experience")).ToString());
+                var e = new UserDataLoadedEvent(userResponse);
+                UserDataLoaded.Invoke(this, e);
+            }, (error) =>
+            {
+                Console.WriteLine(error.LocalizedDescription);
+            });
+        }
 
+        public void LoadUserSkills(){
+            userNode.GetChild("UserSkills").ObserveSingleEvent(DataEventType.Value, (snapshot) =>
+            {
+                List<Skill> skillsResponse = new List<Skill>();
+                var data = snapshot.GetValue<NSDictionary>().Values;
+                foreach (var skill in data)
+                {
+                    Skill sk = new Skill();
+                    sk.Name = skill.ValueForKey(new NSString("Name")).ToString();
+                    sk.Description = skill.ValueForKey(new NSString("Description")).ToString();
+                    sk.Level = int.Parse(skill.ValueForKey(new NSString("Level")).ToString());
+                    //sk.Level = int.Parse(skill.)
+                    skillsResponse.Add(sk);
+                }
+                var e = new SkillsDataLoadedEvent(skillsResponse);
+                SkillsDataLoaded.Invoke(this, e);
+            }, (error) =>
+            {
+                Console.WriteLine(error.LocalizedDescription);
+            });
+        }
         #endregion
 
         #region Write Data Methods
@@ -85,25 +130,60 @@ namespace PipboyOrganizer.DataAccess
                 userNode.GetChild("ActiveQuests").GetChild("Quest02").GetChild("QuestStages").GetChild($"Stage{cont++}").SetValue<NSDictionary>(stage);
             }
         }
+
+        /// <summary>
+        /// Adds the new skill to User skills
+        /// </summary>
+        /// <param name="s">The skill you want to add</param>
+        public void AddNewSkill(Skill s)
+        {
+            //Skill keys
+            object[] skillKeys = { "Description", "Level", "Name" };
+            //Skill values
+            object[] skillValues = { s.Description, s.Level, s.Name };
+            //Skill NSDictionary creation
+            var sk = NSDictionary.FromObjectsAndKeys(skillValues, skillKeys, skillKeys.Length);
+
+            DatabaseReference skillsNode = userNode.GetChild("UserSkills");
+            //TODO: Implement counter node
+            skillsNode.GetChild("Skill04").SetValue<NSDictionary>(sk);
+        }
         #endregion
 
-        //public class TweetsFetchedEventArgs : EventArgs
-        //{
-        //    public List<Status> Tweets { get; private set; }
-        //    public TweetsFetchedEventArgs(List<Status> tweets)
-        //    {
-        //        Tweets = tweets;
-        //    }
+        #region Update Data Methods
+        /// <summary>
+        /// Updates the user data.
+        /// </summary>
+        /// <param name="u">User object to replace data</param>
+        public void UpdateUserData(User u)
+        {
+            userNode.GetChild("Username").SetValue<NSString>(new NSString(u.Username));
+            userNode.GetChild("Experience").SetValue<NSNumber>(new NSNumber(u.Experience));
+            userNode.GetChild("UserLevel").SetValue<NSNumber>(new NSNumber(u.UserLevel));
+        }
+        #endregion
+    }
 
-        //}
-        //public class TweetsFetchedFailedEventArgs : EventArgs
-        //{
-        //    //propiedad que se llama ErrorMesage
-        //    public String ErrorMessage { get; private set; }
-        //    public TweetsFetchedFailedEventArgs(String errorMessage)
-        //    {
-        //        ErrorMessage = errorMessage;
-        //    }
-        //}
+    public class QuestDataLoadedEvent : EventArgs
+    {
+        public Quest quest { get; private set; }
+        public QuestDataLoadedEvent(Quest _quest)
+        {
+            quest = _quest;
+        }
+    }
+
+    public class UserDataLoadedEvent : EventArgs{
+        public User user { get; private set; }
+        public UserDataLoadedEvent(User _user){
+            user = _user;
+        }
+    }
+
+    public class SkillsDataLoadedEvent : EventArgs{
+        public List<Skill> skills { get; private set; }
+        public SkillsDataLoadedEvent(List<Skill> _skills){
+            skills = _skills;
+        }
     }
 }
