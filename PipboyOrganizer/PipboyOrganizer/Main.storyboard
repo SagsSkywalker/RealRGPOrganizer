@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="0sY-mE-YQM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="0sY-mE-YQM">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="PingFang.ttc">
-            <string>PingFangTC-Regular</string>
-            <string>PingFangTC-Semibold</string>
-            <string>PingFangTC-Thin</string>
-            <string>PingFangTC-Ultralight</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--Main Menu-->
         <scene sceneID="tne-QT-ifu">
@@ -430,6 +422,9 @@
                                 <rect key="frame" x="245" y="637" width="114" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Create Quest"/>
+                                <connections>
+                                    <action selector="BtnAddQuest:" destination="4yp-O8-nwi" eventType="touchUpInside" id="Mtk-2O-H1Z"/>
+                                </connections>
                             </button>
                             <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="LMr-7s-Ri2">
                                 <rect key="frame" x="0.0" y="333" width="375" height="46"/>
@@ -443,8 +438,6 @@
                     </view>
                     <connections>
                         <outlet property="BtnAddStage" destination="a41-d1-niC" id="gce-U0-aVH"/>
-                        <outlet property="BtnCreateQuest" destination="1OL-te-aPk" id="Scd-gU-h1d"/>
-                        <outlet property="BtnCreateQuestTouchUpInside" destination="1OL-te-aPk" id="DpY-UH-Pgq"/>
                         <outlet property="DpExpiringDate" destination="LMr-7s-Ri2" id="dJh-wG-a1b"/>
                         <outlet property="TxtEXP" destination="ifA-0A-Dut" id="ZLj-0l-VUa"/>
                         <outlet property="TxtQuestName" destination="6HL-og-MkI" id="oWr-kf-uO7"/>

@@ -2,7 +2,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Foundation;
+using PipboyOrganizer.DataAccess;
 using PipboyOrganizer.Models;
 using UIKit;
 
@@ -11,6 +13,8 @@ namespace PipboyOrganizer
     public partial class AddQuestViewController : UIViewController,IUITableViewDelegate, IUITableViewDataSource
 	{
         List<Stage> stages = new List<Stage>();
+        FirebaseManager fb = new FirebaseManager();
+        Quest quest = new Quest();
 
 		public AddQuestViewController (IntPtr handle) : base (handle)
 		{
@@ -39,16 +43,27 @@ namespace PipboyOrganizer
 
                 tblStages.ReloadData();
             });
-                 
-           // NSIndexPath indexPath = NSIndexPath.FromRowSection(stages.Count - 1, 0);
-
-            //tblStages.InsertRows(indexPath,UITableViewRowAnimation.Automatic);
         }
 		partial void BtnAddStageTouchUpInside(NSObject sender)
 		{
-            
             AddStage();
 		}
 
-	}
+        partial void BtnAddQuest(NSObject sender)
+        {
+            NSDateFormatter formatter = new NSDateFormatter();
+            formatter.DateFormat = "yyyy/MM/dd hh:mm:ss";
+            var fecha = formatter.ToString(DpExpiringDate.Date);
+            quest.Name = TxtQuestName.Text;
+            quest.Description = TxtvQuestDescription.Text;
+            quest.StartDate = DateTime.Now;
+            quest.ExpiringDate = DateTime.ParseExact(fecha, "yyyy/MM/dd hh:mm:ss", CultureInfo.InvariantCulture);
+            quest.RewardXP = int.Parse(TxtEXP.Text);
+            quest.isCompleted = false;
+            quest.Status = true;
+            quest.QuestStages = stages;
+            fb.AddNewQuest(quest);
+            //throw new NotImplementedException();
+        }
+    }
 }
