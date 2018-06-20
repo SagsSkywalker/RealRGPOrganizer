@@ -161,6 +161,7 @@
     <Compile Include="AddQuestViewController.designer.cs">
       <DependentUpon>AddQuestViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserPersistanceClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />

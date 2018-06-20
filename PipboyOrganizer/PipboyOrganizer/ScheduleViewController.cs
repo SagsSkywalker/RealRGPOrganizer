@@ -17,6 +17,8 @@ namespace PipboyOrganizer
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
+			cvSkills.DataSource = this;
+			cvSkills.Delegate = this;
 		}
 
 		partial void AddSkill_TouchUpInside (NSObject sender)
@@ -77,12 +79,16 @@ namespace PipboyOrganizer
 
 		public UICollectionViewCell GetCell (UICollectionView collectionView, NSIndexPath indexPath)
 		{
-			throw new NotImplementedException ();
+			var cell = collectionView.DequeueReusableCell (nameof (SkillViewCell), indexPath) as SkillViewCell;
+			cell.Name = UserPersistanceClass.myUser.UserSkills [indexPath.Row].Name;
+			cell.SkillDescription = UserPersistanceClass.myUser.UserSkills [indexPath.Row].Description;
+			cell.Level = UserPersistanceClass.myUser.UserSkills [indexPath.Row].Level.ToString ();
+			return cell;
 		}
 
 		public nint GetItemsCount (UICollectionView collectionView, nint section)
 		{
-			return 3;
+			return UserPersistanceClass.myUser?.UserSkills == null ? 0 : UserPersistanceClass.myUser.UserSkills.Count;
 		}
 
 	}
