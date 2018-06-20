@@ -18,12 +18,10 @@ namespace PipboyOrganizer.DataAccess
         static readonly Lazy<FirebaseManager> lazy = new Lazy<FirebaseManager>(() => new FirebaseManager());
         public static FirebaseManager SharedInstance { get => lazy.Value; }
 
-        public event EventHandler<QuestDataLoadedEvent> QuestDataLoaded;
         public event EventHandler<UserDataLoadedEvent> UserDataLoaded;
         public event EventHandler<SkillsDataLoadedEvent> SkillsDataLoaded;
         public event EventHandler<QuestsDataLoadedEvent> QuestsDataLoaded;
-        public event EventHandler<StageDataLoadedEvent> StageDataLoaded;
-        public event EventHandler<StagesDataLoadedEvent> StagesDataLoaded;
+        //public event EventHandler<CQuestsDataLoadedEvent> CQuestsDataLoaded;
         #endregion
 
         public FirebaseManager()
@@ -31,6 +29,9 @@ namespace PipboyOrganizer.DataAccess
         }
 
         #region Read Data Methods
+        /// <summary>
+        /// Loads the user simple data.
+        /// </summary>
         public void LoadUserData()
         {
             userNode.ObserveSingleEvent(DataEventType.Value, (snapshot) =>
@@ -49,33 +50,39 @@ namespace PipboyOrganizer.DataAccess
             });
         }
 
+        /// <summary>
+        /// Loads the user quests.
+        /// </summary>
         public void LoadUserQuests(){
+            //Amelie Lens
             userNode.GetChild("ActiveQuests").ObserveSingleEvent(DataEventType.Value, (snapshot) =>
             {
-                List<Quest> questsResponse = new List<Quest>();
-                var data = snapshot.GetValue<NSDictionary>().Values;
-                foreach (var quest in data)
+            List<Quest> questsResponse = new List<Quest>();
+            var data = snapshot.GetValue<NSDictionary>().Values;
+            foreach (var quest in data)
+            {
+                Quest qt = new Quest();
+                qt.Name = quest.ValueForKey(new NSString("Name")).ToString();
+                qt.Description = quest.ValueForKey(new NSString("Description")).ToString();
+                qt.StartDate = DateTime.Parse(quest.ValueForKey(new NSString("StartDate")).ToString());
+                qt.ExpiringDate = DateTime.Parse(quest.ValueForKey(new NSString("ExpiringDate")).ToString());
+                qt.isCompleted = (quest.ValueForKey(new NSString("isCompleted")).ToString() == "true");
+                qt.Status = (quest.ValueForKey(new NSString("Status")).ToString() == "true");
+                qt.RewardXP = int.Parse(quest.ValueForKey(new NSString("RewardXP")).ToString());
+                var test = (quest.ValueForKey(new NSString("QuestStages")) as NSDictionary).Values.Length;
+                var data2 = (quest.ValueForKey(new NSString("QuestStages")) as NSDictionary).Values;
+                List<Stage> stagesResponse = new List<Stage>();
+                for (int i = 0; i < test; i++)
                 {
-                    Quest qt = new Quest();
-                    qt.Name = quest.ValueForKey(new NSString("Name")).ToString();
-                    qt.Description = quest.ValueForKey(new NSString("Description")).ToString();
-                    qt.StartDate = DateTime.Parse(quest.ValueForKey(new NSString("StartDate")).ToString());
-                    qt.ExpiringDate = DateTime.Parse(quest.ValueForKey(new NSString("ExpiringDate")).ToString());
-                    qt.isCompleted = (quest.ValueForKey(new NSString("isCompleted")).ToString() == "true");
-                    qt.Status = (quest.ValueForKey(new NSString("Status")).ToString() == "true");
-                    qt.RewardXP = int.Parse(quest.ValueForKey(new NSString("RewardXP")).ToString());
-                    var data2 = quest.ValueForKey(new NSString("QuestStages"));
-                    List<Stage> stagesResponse = new List<Stage>();
-                    //for (nuint i = 0; i < data2.Count; i++)
-                    //{
-                    //    Stage st = new Stage();
-                    //    st.Description = data2.GetItem<NSDictionary> (i)["Description"].ToString();
-                    //    st.isCompleted = (data2.GetItem<NSDictionary>(i)["isCompleted"].ToString()=="true");
-                    //    st.IDStage = int.Parse(data2.GetItem<NSDictionary>(i)["StageID"].ToString());
-                    //    stagesResponse.Add(st);
-                    //}
-                    qt.QuestStages = stagesResponse;
+                    Stage st = new Stage();
+                    st.Description = (data2.GetValue(i) as NSDictionary).ValueForKey(new NSString("Description")).ToString();
+                    st.IDStage = int.Parse((data2.GetValue(i) as NSDictionary).ValueForKey(new NSString("StageID")).ToString());
+                    st.isCompleted = ((data2.GetValue(i) as NSDictionary).ValueForKey(new NSString("isCompleted")).ToString() == "true");
+                    stagesResponse.Add(st);
                 }
+                qt.QuestStages = stagesResponse;
+                questsResponse.Add(qt);
+            }
                 var e = new QuestsDataLoadedEvent(questsResponse);
                 QuestsDataLoaded.Invoke(this, e);
             }, (error) =>
@@ -83,6 +90,48 @@ namespace PipboyOrganizer.DataAccess
                 Console.WriteLine(error.LocalizedDescription);
             });
         }
+
+        ///// <summary>
+        ///// Loads the user completed quests.
+        ///// </summary>
+        //public void LoadUserCompletedQuests()
+        //{
+        //    //Amelie Lens
+        //    userNode.GetChild("CompletedQuests").ObserveSingleEvent(DataEventType.Value, (snapshot) =>
+        //    {
+        //        List<Quest> questsResponse = new List<Quest>();
+        //        var data = snapshot.GetValue<NSDictionary>().Values;
+        //        foreach (var quest in data)
+        //        {
+        //            Quest qt = new Quest();
+        //            qt.Name = quest.ValueForKey(new NSString("Name")).ToString();
+        //            qt.Description = quest.ValueForKey(new NSString("Description")).ToString();
+        //            qt.StartDate = DateTime.Parse(quest.ValueForKey(new NSString("StartDate")).ToString());
+        //            qt.ExpiringDate = DateTime.Parse(quest.ValueForKey(new NSString("ExpiringDate")).ToString());
+        //            qt.isCompleted = (quest.ValueForKey(new NSString("isCompleted")).ToString() == "true");
+        //            qt.Status = (quest.ValueForKey(new NSString("Status")).ToString() == "true");
+        //            qt.RewardXP = int.Parse(quest.ValueForKey(new NSString("RewardXP")).ToString());
+        //            var test = (quest.ValueForKey(new NSString("QuestStages")) as NSDictionary).Values.Length;
+        //            var data2 = (quest.ValueForKey(new NSString("QuestStages")) as NSDictionary).Values;
+        //            List<Stage> stagesResponse = new List<Stage>();
+        //            for (int i = 0; i < test; i++)
+        //            {
+        //                Stage st = new Stage();
+        //                st.Description = (data2.GetValue(i) as NSDictionary).ValueForKey(new NSString("Description")).ToString();
+        //                st.IDStage = int.Parse((data2.GetValue(i) as NSDictionary).ValueForKey(new NSString("StageID")).ToString());
+        //                st.isCompleted = ((data2.GetValue(i) as NSDictionary).ValueForKey(new NSString("isCompleted")).ToString() == "true");
+        //                stagesResponse.Add(st);
+        //            }
+        //            qt.QuestStages = stagesResponse;
+        //            questsResponse.Add(qt);
+        //        }
+        //        var e = new CQuestsDataLoadedEvent(questsResponse);
+        //        CQuestsDataLoaded.Invoke(this, e);
+        //    }, (error) =>
+        //    {
+        //        Console.WriteLine(error.LocalizedDescription);
+        //    });
+        //}
 
         /// <summary>
         /// Loads the user skills.
@@ -228,4 +277,13 @@ namespace PipboyOrganizer.DataAccess
             quests = _quests;
         }
     }
+
+    //public class CQuestsDataLoadedEvent : EventArgs
+    //{
+    //    public List<Quest> quests { get; private set; }
+    //    public CQuestsDataLoadedEvent(List<Quest> _quests)
+    //    {
+    //        quests = _quests;
+    //    }
+    //}
 }
