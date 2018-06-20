@@ -12,9 +12,18 @@ namespace PipboyOrganizer
 	[Register ("ScheduleViewController")]
 	partial class ScheduleViewController
 	{
+		[Outlet]
+		UIKit.UICollectionView cvSkills { get; set; }
+
+		[Action ("AddSkill_TouchUpInside:")]
+		partial void AddSkill_TouchUpInside (Foundation.NSObject sender);
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (cvSkills != null) {
+				cvSkills.Dispose ();
+				cvSkills = null;
+			}
 		}
 	}
 }
