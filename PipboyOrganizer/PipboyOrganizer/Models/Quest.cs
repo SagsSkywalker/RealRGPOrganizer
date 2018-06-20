@@ -53,6 +53,12 @@ namespace PipboyOrganizer.Models
             set;
         }
 
+        public List<Skill> AffectedSkills
+        {
+            get;
+            set;
+        }
+
         public Quest()
         {
         }

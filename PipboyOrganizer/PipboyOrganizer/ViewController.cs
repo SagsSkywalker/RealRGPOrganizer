@@ -48,9 +48,13 @@ namespace PipboyOrganizer
             myUser = new User();
             FirebaseManager.SharedInstance.UserDataLoaded += FirebaseManager_UserDataLoaded;
             FirebaseManager.SharedInstance.SkillsDataLoaded += FirebaseManager_SkillsDataLoaded;
+            FirebaseManager.SharedInstance.QuestsDataLoaded += FirebaseManager_QuestsDataLoaded;
             FirebaseManager.SharedInstance.LoadUserData();
+        }
 
-
+        private void FirebaseManager_QuestsDataLoaded(object sender, QuestsDataLoadedEvent e)
+        {
+            myUser.ActiveQuests = e.quests;
         }
 
         private void FirebaseManager_SkillsDataLoaded(object sender, SkillsDataLoadedEvent e)
@@ -66,6 +70,7 @@ namespace PipboyOrganizer
             LblUserName.Text = myUser.Username;
             LblUserLevel.Text = myUser.UserLevel.ToString();
             FirebaseManager.SharedInstance.LoadUserSkills();
+            FirebaseManager.SharedInstance.LoadUserQuests();
         }
 
         public void LoadQuestData(){

@@ -5,6 +5,8 @@ using Foundation;
 using PipboyOrganizer.Controllers;
 using PipboyOrganizer.Models;
 
+using nuint = global::System.UInt32;
+
 namespace PipboyOrganizer.DataAccess
 {
     public class FirebaseManager
@@ -13,15 +15,15 @@ namespace PipboyOrganizer.DataAccess
         DatabaseReference rootNode = Database.DefaultInstance.GetRootReference();
         DatabaseReference userNode = Database.DefaultInstance.GetRootReference().GetChild("Users").GetChild("User");
 
-        //public event EventHandler<TweetsFetchedEventArgs> TweetsFetched;
-        //public event EventHandler<TweetsFetchedFailedEventArgs> FailedTweetsFetched;
-
         static readonly Lazy<FirebaseManager> lazy = new Lazy<FirebaseManager>(() => new FirebaseManager());
         public static FirebaseManager SharedInstance { get => lazy.Value; }
 
         public event EventHandler<QuestDataLoadedEvent> QuestDataLoaded;
         public event EventHandler<UserDataLoadedEvent> UserDataLoaded;
         public event EventHandler<SkillsDataLoadedEvent> SkillsDataLoaded;
+        public event EventHandler<QuestsDataLoadedEvent> QuestsDataLoaded;
+        public event EventHandler<StageDataLoadedEvent> StageDataLoaded;
+        public event EventHandler<StagesDataLoadedEvent> StagesDataLoaded;
         #endregion
 
         public FirebaseManager()
@@ -47,6 +49,44 @@ namespace PipboyOrganizer.DataAccess
             });
         }
 
+        public void LoadUserQuests(){
+            userNode.GetChild("ActiveQuests").ObserveSingleEvent(DataEventType.Value, (snapshot) =>
+            {
+                List<Quest> questsResponse = new List<Quest>();
+                var data = snapshot.GetValue<NSDictionary>().Values;
+                foreach (var quest in data)
+                {
+                    Quest qt = new Quest();
+                    qt.Name = quest.ValueForKey(new NSString("Name")).ToString();
+                    qt.Description = quest.ValueForKey(new NSString("Description")).ToString();
+                    qt.StartDate = DateTime.Parse(quest.ValueForKey(new NSString("StartDate")).ToString());
+                    qt.ExpiringDate = DateTime.Parse(quest.ValueForKey(new NSString("ExpiringDate")).ToString());
+                    qt.isCompleted = (quest.ValueForKey(new NSString("isCompleted")).ToString() == "true");
+                    qt.Status = (quest.ValueForKey(new NSString("Status")).ToString() == "true");
+                    qt.RewardXP = int.Parse(quest.ValueForKey(new NSString("RewardXP")).ToString());
+                    var data2 = quest.ValueForKey(new NSString("QuestStages"));
+                    List<Stage> stagesResponse = new List<Stage>();
+                    //for (nuint i = 0; i < data2.Count; i++)
+                    //{
+                    //    Stage st = new Stage();
+                    //    st.Description = data2.GetItem<NSDictionary> (i)["Description"].ToString();
+                    //    st.isCompleted = (data2.GetItem<NSDictionary>(i)["isCompleted"].ToString()=="true");
+                    //    st.IDStage = int.Parse(data2.GetItem<NSDictionary>(i)["StageID"].ToString());
+                    //    stagesResponse.Add(st);
+                    //}
+                    qt.QuestStages = stagesResponse;
+                }
+                var e = new QuestsDataLoadedEvent(questsResponse);
+                QuestsDataLoaded.Invoke(this, e);
+            }, (error) =>
+            {
+                Console.WriteLine(error.LocalizedDescription);
+            });
+        }
+
+        /// <summary>
+        /// Loads the user skills.
+        /// </summary>
         public void LoadUserSkills(){
             userNode.GetChild("UserSkills").ObserveSingleEvent(DataEventType.Value, (snapshot) =>
             {
@@ -77,31 +117,6 @@ namespace PipboyOrganizer.DataAccess
         /// <param name="q">The quest you want to add</param>
         public void AddNewQuest(Quest q)
         {
-            ////Quest Keys
-            //object[] questCreatedKeys = { "Description", "ExpiringDate", "Name", "QuestStages", "RewardXP", "StartDate", "Status", "isCompleted" };
-            ////Stage Keys
-            //object[] questStage1Keys = { "Description", "StageID", "isCompleted" };
-            ////Stage Values
-            //object[] questStage1 = { "Kill ferals in Cambridge Police Station", "1", "false" };
-            ////Stage NSDictionary creation
-            //var qs1 = NSDictionary.FromObjectsAndKeys(questStage1, questStage1Keys, questStage1Keys.Length);
-
-            //object[] questStage2Keys = { "Description", "StageID", "isCompleted" };
-            //object[] questStage2 = { "Kill ferals in Sanctuary", "2", "false" };
-            //var qs2 = NSDictionary.FromObjectsAndKeys(questStage2, questStage2Keys, questStage2Keys.Length);
-
-            ////Quest Values
-            //object[] questCreatedValues = { "Knight Farias asked you to kill feral ghouls", "2018/7/17 19:10:20", "Cleansing the Commonwealth", "", 500, "2018/6/17 19:10:20", "true", "false" };
-            ////Quest NSDictionary creation
-            //var questCreatedFinal = NSDictionary.FromObjectsAndKeys(questCreatedValues, questCreatedKeys, questCreatedKeys.Length);
-
-            //DatabaseReference rootNode = Database.DefaultInstance.GetRootReference();
-            //DatabaseReference userNode = rootNode.GetChild("Users").GetChild("User");
-            ////Create quest node and add Quest data.
-            //userNode.GetChild("ActiveQuests").GetChild("Quest01").SetValue<NSDictionary>(questCreatedFinal);
-            ////Create stage node and add Stage data.
-            //userNode.GetChild("ActiveQuests").GetChild("Quest01").GetChild("QuestStages").GetChild("Stage01").SetValue<NSDictionary>(qs1);
-            //userNode.GetChild("ActiveQuests").GetChild("Quest01").GetChild("QuestStages").GetChild("Stage02").SetValue<NSDictionary>(qs2);
 
             //Quest Keys
             object[] questCreatedKeys = { "Description", "ExpiringDate", "Name", "QuestStages", "RewardXP", "StartDate", "Status", "isCompleted" };
@@ -173,6 +188,15 @@ namespace PipboyOrganizer.DataAccess
         }
     }
 
+    public class StageDataLoadedEvent : EventArgs
+    {
+        public Stage stage { get; private set; }
+        public StageDataLoadedEvent(Stage _stage)
+        {
+            stage = _stage;
+        }
+    }
+
     public class UserDataLoadedEvent : EventArgs{
         public User user { get; private set; }
         public UserDataLoadedEvent(User _user){
@@ -184,6 +208,24 @@ namespace PipboyOrganizer.DataAccess
         public List<Skill> skills { get; private set; }
         public SkillsDataLoadedEvent(List<Skill> _skills){
             skills = _skills;
+        }
+    }
+
+    public class StagesDataLoadedEvent : EventArgs
+    {
+        public List<Stage> stages { get; private set; }
+        public StagesDataLoadedEvent(List<Stage> _stages)
+        {
+            stages = _stages;
+        }
+    }
+
+    public class QuestsDataLoadedEvent : EventArgs
+    {
+        public List<Quest> quests { get; private set; }
+        public QuestsDataLoadedEvent(List<Quest> _quests)
+        {
+            quests = _quests;
         }
     }
 }
