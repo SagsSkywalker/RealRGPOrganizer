@@ -3,6 +3,7 @@
 using System;
 
 using Foundation;
+using PipboyOrganizer.DataAccess;
 using PipboyOrganizer.Models;
 using UIKit;
 
@@ -10,7 +11,11 @@ namespace PipboyOrganizer
 {
 	public partial class ScheduleViewController : UIViewController ,IUICollectionViewDelegate,IUICollectionViewDataSource
 	{
-		public ScheduleViewController (IntPtr handle) : base (handle)
+        #region Class Variables
+        FirebaseManager fb = new FirebaseManager();
+        #endregion
+
+        public ScheduleViewController (IntPtr handle) : base (handle)
 		{
 		}
 
@@ -41,11 +46,12 @@ namespace PipboyOrganizer
 							skill.Name = skillName;
 							skill.Description = skillDescription;
 							skill.Level = 1;
-							//skill.Description;
-							//TableView.ReloadData ();
+                            fb.AddNewSkill(skill);
+                            UserPersistanceClass.myUser.UserSkills.Add(skill);
+                            cvSkills.ReloadData ();
 
 						} catch (Exception ex) {
-
+                            throw ex;
 						}
 					}));
 					field = textField;
