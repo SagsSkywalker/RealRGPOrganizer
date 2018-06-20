@@ -22,6 +22,9 @@ namespace PipboyOrganizer
 		UIKit.UIButton BtnCreateQuestTouchUpInside { get; set; }
 
 		[Outlet]
+		UIKit.UICollectionView cvSkills { get; set; }
+
+		[Outlet]
 		UIKit.UIDatePicker DpExpiringDate { get; set; }
 
 		[Outlet]
@@ -90,6 +93,11 @@ namespace PipboyOrganizer
 			if (TxtvQuestDescription != null) {
 				TxtvQuestDescription.Dispose ();
 				TxtvQuestDescription = null;
+			}
+
+			if (cvSkills != null) {
+				cvSkills.Dispose ();
+				cvSkills = null;
 			}
 		}
 	}

@@ -3,14 +3,87 @@
 using System;
 
 using Foundation;
+using PipboyOrganizer.Models;
 using UIKit;
 
 namespace PipboyOrganizer
 {
-	public partial class ScheduleViewController : UIViewController
+	public partial class ScheduleViewController : UIViewController ,IUICollectionViewDelegate,IUICollectionViewDataSource
 	{
 		public ScheduleViewController (IntPtr handle) : base (handle)
 		{
 		}
+
+		public override void ViewDidLoad ()
+		{
+			base.ViewDidLoad ();
+		}
+
+		partial void AddSkill_TouchUpInside (NSObject sender)
+		{
+			InvokeOnMainThread ( () => {
+				var alert = UIAlertController.Create ("New Skill", "Write your Skill", UIAlertControllerStyle.Alert);
+
+				UITextField field = new UITextField ();
+				UITextField field2 = new UITextField ();
+
+				alert.AddTextField ((textField) => {
+					alert.AddAction (UIAlertAction.Create ($"OK", UIAlertActionStyle.Default, delegate {
+						try {
+
+							var skillName = alert.TextFields [0].Text;
+							var skillDescription = alert.TextFields [1].Text;
+							Console.WriteLine (skillName);
+							Console.WriteLine (skillDescription);
+							Skill skill = new Skill ();
+							skill.Name = skillName;
+							skill.Description = skillDescription;
+							skill.Level = 1;
+							//skill.Description;
+							//TableView.ReloadData ();
+
+						} catch (Exception ex) {
+
+						}
+					}));
+					field = textField;
+
+					field.Placeholder = "Example: Cooking";
+					field.Text = "";
+					field.AutocorrectionType = UITextAutocorrectionType.No;
+					field.KeyboardType = UIKeyboardType.Default;
+					field.ReturnKeyType = UIReturnKeyType.Done;
+					field.ClearButtonMode = UITextFieldViewMode.WhileEditing;
+
+				});
+				alert.AddTextField ((UITextField obj) => {
+					field2 = obj;
+
+					field2.Placeholder = "Example: Ability to make some delicious dishes";
+					field2.Text = "";
+					field2.AutocorrectionType = UITextAutocorrectionType.No;
+					field2.KeyboardType = UIKeyboardType.Default;
+					field2.ReturnKeyType = UIReturnKeyType.Done;
+					field2.ClearButtonMode = UITextFieldViewMode.WhileEditing;
+
+				});
+
+				alert.AddAction (UIAlertAction.Create ("Cancel", UIAlertActionStyle.Cancel, null));
+				PresentViewController (alert, true, null);
+			});
+
+
+		}
+
+		public UICollectionViewCell GetCell (UICollectionView collectionView, NSIndexPath indexPath)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public nint GetItemsCount (UICollectionView collectionView, nint section)
+		{
+			return 3;
+		}
+
 	}
 }
