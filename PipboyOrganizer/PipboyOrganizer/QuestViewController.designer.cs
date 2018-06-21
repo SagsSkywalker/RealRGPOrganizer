@@ -12,9 +12,15 @@ namespace PipboyOrganizer
 	[Register ("QuestViewController")]
 	partial class QuestViewController
 	{
+		[Outlet]
+		UIKit.UITableView tblQuests { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (tblQuests != null) {
+				tblQuests.Dispose ();
+				tblQuests = null;
+			}
 		}
 	}
 }

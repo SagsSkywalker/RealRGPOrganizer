@@ -13,6 +13,12 @@ namespace PipboyOrganizer
 	partial class MainTableViewCell
 	{
 		[Outlet]
+		UIKit.UIButton BtnQuestInfo { get; set; }
+
+		[Outlet]
+		UIKit.UILabel LblLastStage { get; set; }
+
+		[Outlet]
 		UIKit.UILabel LblQuestDescription { get; set; }
 
 		[Outlet]
@@ -23,9 +29,9 @@ namespace PipboyOrganizer
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (LblQuestName != null) {
-				LblQuestName.Dispose ();
-				LblQuestName = null;
+			if (LblLastStage != null) {
+				LblLastStage.Dispose ();
+				LblLastStage = null;
 			}
 
 			if (LblQuestDescription != null) {
@@ -33,9 +39,19 @@ namespace PipboyOrganizer
 				LblQuestDescription = null;
 			}
 
+			if (LblQuestName != null) {
+				LblQuestName.Dispose ();
+				LblQuestName = null;
+			}
+
 			if (TblInside != null) {
 				TblInside.Dispose ();
 				TblInside = null;
+			}
+
+			if (BtnQuestInfo != null) {
+				BtnQuestInfo.Dispose ();
+				BtnQuestInfo = null;
 			}
 		}
 	}

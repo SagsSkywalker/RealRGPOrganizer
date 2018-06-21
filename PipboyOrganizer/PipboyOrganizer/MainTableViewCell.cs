@@ -19,6 +19,11 @@ namespace PipboyOrganizer
             get => LblQuestDescription.Text;
             set => LblQuestDescription.Text = value;
         }
+		public String LastStage {
+			get => LblLastStage.Text;
+			set => LblLastStage.Text = value;
+		}
+
         public UITableView TableViewInside
         {
             get => TblInside;

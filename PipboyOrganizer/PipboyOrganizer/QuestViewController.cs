@@ -7,95 +7,96 @@ using Foundation;
 using PipboyOrganizer.Models;
 using UIKit;
 
-namespace PipboyOrganizer
-{
-    public partial class QuestViewController : UIViewController, IUITableViewDelegate, IUITableViewDataSource
-    {
-        public int c = 0;
+namespace PipboyOrganizer {
+	public partial class QuestViewController : UIViewController, IUITableViewDelegate, IUITableViewDataSource {
+		public int c = 0;
 
-        public QuestViewController(IntPtr handle) : base(handle)
-        {
+		public QuestViewController (IntPtr handle) : base (handle)
+		{
 
-        }
+		}
 
+		public override void ViewDidLoad ()
+		{
+			base.ViewDidLoad ();
 
-        public UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
-        {
-            //try
-            //{
-            //    for (int i = 0; i < UserPersistanceClass.myUser.ActiveQuests.Count; i++)
-            //    {
-            //        Quest quest = UserPersistanceClass.myUser.ActiveQuests[i];
-            //        //Quest
-            //        if (tableView.Tag == 10)
-            //        {
-            //            var cell = tableView.DequeueReusableCell("MainTableViewCell", indexPath) as MainTableViewCell;
-            //            cell.QuestName = quest.Name;
-            //            cell.QuestDescription = quest.Description;
-            //            tableView.RowHeight = 400;
-            //            return cell;
-            //        }
-            //        for (int k = 0; k < quest.QuestStages.Count; k++)
-            //        {
-            //            //Stages
-            //            if (tableView.Tag == 20)
-            //            {
-            //                var cell = tableView.DequeueReusableCell("InsideTableViewCell", indexPath) as InsideTableViewCell;
-            //                cell.Task = quest.QuestStages[k].Description;
-            //                tableView.RowHeight = 100;
-            //                tableView.EstimatedRowHeight = 50;
-            //                return cell;
-            //            }
-            //        }
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
-            List<Quest> quests = UserPersistanceClass.myUser.ActiveQuests;
+		}
 
-            foreach (var quest in quests)
-            {
-                
-                if (tableView.Tag == 10)
-                {
-                    var cell = tableView.DequeueReusableCell("MainTableViewCell", indexPath) as MainTableViewCell;
-                    cell.QuestName = quest.Name;
-                    cell.QuestDescription = quest.Description;
-                    tableView.RowHeight = 400;
-                    c = 0;
-                    return cell;
-                }
-                else{
-                    var cell = tableView.DequeueReusableCell("InsideTableViewCell", indexPath) as InsideTableViewCell;
-                    cell.Task = quest.QuestStages[c].Description;
-                    tableView.RowHeight = 100;
-                    tableView.EstimatedRowHeight = 50;
-                    c++;
-                    return cell;
-                }
-            }
-
-            return null;
-
-        }
+		public override void PrepareForSegue (UIStoryboardSegue segue, NSObject sender)
+		{
+			
+			if (segue.Identifier == "QuestDetail") {
+				var indexPath = tblQuests.IndexPathForSelectedRow;
+				var vc = segue.DestinationViewController as QuestInfoViewController;
+				vc.selectedQuest = UserPersistanceClass.myUser.ActiveQuests [indexPath.Row];
+				PerformSegue ("QuestDetail", sender);
+			}
+		}
 
 
-        public nint RowsInSection(UITableView tableView, nint section)
-        {
-            if (tableView.Tag == 10)
-            {
-                return UserPersistanceClass.myUser.ActiveQuests.Count;
-            }
-            else if (tableView.Tag == 20)
-            {
-                return ;
-            }
-            return 1;
-        }
+		public UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
+		{
+			//try
+			//{
+			//    for (int i = 0; i < UserPersistanceClass.myUser.ActiveQuests.Count; i++)
+			//    {
+			//        Quest quest = UserPersistanceClass.myUser.ActiveQuests[i];
+			//        //Quest
+			//        if (tableView.Tag == 10)
+			//        {
+			//            var cell = tableView.DequeueReusableCell("MainTableViewCell", indexPath) as MainTableViewCell;
+			//            cell.QuestName = quest.Name;
+			//            cell.QuestDescription = quest.Description;
+			//            tableView.RowHeight = 400;
+			//            return cell;
+			//        }
+			//        for (int k = 0; k < quest.QuestStages.Count; k++)
+			//        {
+			//            //Stages
+			//            if (tableView.Tag == 20)
+			//            {
+			//                var cell = tableView.DequeueReusableCell("InsideTableViewCell", indexPath) as InsideTableViewCell;
+			//                cell.Task = quest.QuestStages[k].Description;
+			//                tableView.RowHeight = 100;
+			//                tableView.EstimatedRowHeight = 50;
+			//                return cell;
+			//            }
+			//        }
+			//    }
+			//}
+			//catch (Exception ex)
+			//{
+			//    throw ex;
+			//}
+
+			var cell = tableView.DequeueReusableCell ("MainTableViewCell", indexPath) as MainTableViewCell;
+			cell.QuestName = UserPersistanceClass.myUser.ActiveQuests [indexPath.Row].Name;
+			cell.QuestDescription = UserPersistanceClass.myUser.ActiveQuests [indexPath.Row].Description;
+
+			foreach (var stage in UserPersistanceClass.myUser.ActiveQuests [indexPath.Row].QuestStages) {
+				if (!stage.isCompleted) {
+					cell.LastStage = stage.Description;
+				}
+			}
+
+			tableView.RowHeight = 100;
+			tableView.EstimatedRowHeight = 50;
+			return cell;
+
+
+		}
+		public override void PerformSegue (string identifier, NSObject sender)
+		{
+			
+				
+		}
+
+		public nint RowsInSection (UITableView tableView, nint section)
+		{
+			return 1;
+		}
 
 
 
-    }
+	}
 }
