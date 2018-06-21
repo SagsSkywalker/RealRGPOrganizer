@@ -25,7 +25,12 @@ namespace PipboyOrganizer
 			cvSkills.DataSource = this;
 			cvSkills.Delegate = this;
 		}
-
+        void showMessage(string title, string message, UIViewController fromViewController)
+        {
+            var alert = UIAlertController.Create(title, message, UIAlertControllerStyle.Alert);
+            alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+            fromViewController.PresentViewController(alert, true, null);
+        }
 		partial void AddSkill_TouchUpInside (NSObject sender)
 		{
 			InvokeOnMainThread ( () => {
@@ -35,20 +40,28 @@ namespace PipboyOrganizer
 				UITextField field2 = new UITextField ();
 
 				alert.AddTextField ((textField) => {
-					alert.AddAction (UIAlertAction.Create ($"OK", UIAlertActionStyle.Default, delegate {
-						try {
+					alert.AddAction (UIAlertAction.Create ($"OK", UIAlertActionStyle.Default, delegate
+                    {
+                    try
+                    {
+                        var skillName = alert.TextFields[0].Text;
+                        var skillDescription = alert.TextFields[1].Text;
+                            if (skillName != "" && skillDescription != "")
+                            {
+                                Console.WriteLine(skillName);
+                                Console.WriteLine(skillDescription);
+                                Skill skill = new Skill();
+                                skill.Name = skillName;
+                                skill.Description = skillDescription;
+                                skill.Level = 1;
+                                fb.AddNewSkill(skill);
+                                UserPersistanceClass.myUser.UserSkills.Add(skill);
+                                cvSkills.ReloadData();
+                            }
+                            else
+                                showMessage("Warning", "You missed some fields, try again.", this);
 
-							var skillName = alert.TextFields [0].Text;
-							var skillDescription = alert.TextFields [1].Text;
-							Console.WriteLine (skillName);
-							Console.WriteLine (skillDescription);
-							Skill skill = new Skill ();
-							skill.Name = skillName;
-							skill.Description = skillDescription;
-							skill.Level = 1;
-                            fb.AddNewSkill(skill);
-                            UserPersistanceClass.myUser.UserSkills.Add(skill);
-                            cvSkills.ReloadData ();
+							
 
 						} catch (Exception ex) {
                             throw ex;
