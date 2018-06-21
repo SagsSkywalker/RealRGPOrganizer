@@ -54,7 +54,7 @@ namespace PipboyOrganizer
                                 skill.Name = skillName;
                                 skill.Description = skillDescription;
                                 skill.Level = 1;
-                                fb.AddNewSkill(skill);
+                                fb.AddNewSkill(skill, UserPersistanceClass.myUser.UserSkills.Count);
                                 UserPersistanceClass.myUser.UserSkills.Add(skill);
                                 cvSkills.ReloadData();
                             }

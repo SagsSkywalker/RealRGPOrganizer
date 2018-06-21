@@ -161,7 +161,7 @@ namespace PipboyOrganizer.DataAccess
             }, (error) =>
             {
                 Console.WriteLine(error.LocalizedDescription);
-                var e = new SkillsDataFailedEvent(error.LocalizedDescription;
+                var e = new SkillsDataFailedEvent(error.LocalizedDescription);
                 SkillsDataFailed.Invoke(this, e);
             });
         }
@@ -208,7 +208,7 @@ namespace PipboyOrganizer.DataAccess
         /// Adds the new skill to User skills
         /// </summary>
         /// <param name="s">The skill you want to add</param>
-        public void AddNewSkill(Skill s)
+        public void AddNewSkill(Skill s, int skillCount)
         {
             //Skill keys
             object[] skillKeys = { "Description", "Level", "Name" };
@@ -219,7 +219,7 @@ namespace PipboyOrganizer.DataAccess
 
             DatabaseReference skillsNode = userNode.GetChild("UserSkills");
             //TODO: Implement counter node
-            skillsNode.GetChild("Skill04").SetValue<NSDictionary>(sk);
+            skillsNode.GetChild($"Skill{skillCount}").SetValue<NSDictionary>(sk);
         }
         #endregion
 

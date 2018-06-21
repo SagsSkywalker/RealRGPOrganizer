@@ -18,9 +18,11 @@ namespace PipboyOrganizer {
 
 		public override void ViewDidLoad ()
 		{
+            tblQuests.ReloadData();
 			base.ViewDidLoad ();
             tblQuests.Delegate = this;
             tblQuests.DataSource = this;
+
 		}
 
 		public override void PrepareForSegue (UIStoryboardSegue segue, NSObject sender)
@@ -37,39 +39,6 @@ namespace PipboyOrganizer {
 
 		public UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
 		{
-			//try
-			//{
-			//    for (int i = 0; i < UserPersistanceClass.myUser.ActiveQuests.Count; i++)
-			//    {
-			//        Quest quest = UserPersistanceClass.myUser.ActiveQuests[i];
-			//        //Quest
-			//        if (tableView.Tag == 10)
-			//        {
-			//            var cell = tableView.DequeueReusableCell("MainTableViewCell", indexPath) as MainTableViewCell;
-			//            cell.QuestName = quest.Name;
-			//            cell.QuestDescription = quest.Description;
-			//            tableView.RowHeight = 400;
-			//            return cell;
-			//        }
-			//        for (int k = 0; k < quest.QuestStages.Count; k++)
-			//        {
-			//            //Stages
-			//            if (tableView.Tag == 20)
-			//            {
-			//                var cell = tableView.DequeueReusableCell("InsideTableViewCell", indexPath) as InsideTableViewCell;
-			//                cell.Task = quest.QuestStages[k].Description;
-			//                tableView.RowHeight = 100;
-			//                tableView.EstimatedRowHeight = 50;
-			//                return cell;
-			//            }
-			//        }
-			//    }
-			//}
-			//catch (Exception ex)
-			//{
-			//    throw ex;
-			//}
-
             var cell = tableView.DequeueReusableCell ("MainTableViewCell", indexPath) as MainTableViewCell;
 			cell.QuestName = UserPersistanceClass.myUser.ActiveQuests [indexPath.Row].Name;
 			cell.QuestDescription = UserPersistanceClass.myUser.ActiveQuests [indexPath.Row].Description;

@@ -86,7 +86,7 @@ namespace PipboyOrganizer
                             quest.Status = true;
                             quest.QuestStages = stages;
                             UserPersistanceClass.myUser.ActiveQuests.Add(quest);
-                            fb.AddNewQuest(quest);
+                            fb.AddNewQuest(quest, UserPersistanceClass.myUser.ActiveQuests.Count);
                         }
                         else
                             showMessage("Warning", "You cannot pick a past date.", this);
