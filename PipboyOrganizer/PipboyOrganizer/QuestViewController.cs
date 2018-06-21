@@ -93,7 +93,7 @@ namespace PipboyOrganizer {
 
 		public nint RowsInSection (UITableView tableView, nint section)
 		{
-			return 1;
+            return UserPersistanceClass.myUser?.ActiveQuests == null ? 0 : UserPersistanceClass.myUser.ActiveQuests.Count;
 		}
 
 
