@@ -69,7 +69,7 @@ namespace PipboyOrganizer
                 }
                 else{
                     var cell = tableView.DequeueReusableCell("InsideTableViewCell", indexPath) as InsideTableViewCell;
-                    cell.Task = quest.QuestStages[c].Description;
+                    cell.Task = quest.QuestStages[0].Description;
                     tableView.RowHeight = 100;
                     tableView.EstimatedRowHeight = 50;
                     c++;
