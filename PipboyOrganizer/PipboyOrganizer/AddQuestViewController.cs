@@ -85,6 +85,7 @@ namespace PipboyOrganizer
                             quest.isCompleted = false;
                             quest.Status = true;
                             quest.QuestStages = stages;
+                            UserPersistanceClass.myUser.ActiveQuests.Add(quest);
                             fb.AddNewQuest(quest);
                         }
                         else

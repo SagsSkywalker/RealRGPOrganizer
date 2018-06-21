@@ -47,15 +47,38 @@ namespace PipboyOrganizer {
 			FirebaseManager.SharedInstance.UserDataLoaded += FirebaseManager_UserDataLoaded;
 			FirebaseManager.SharedInstance.SkillsDataLoaded += FirebaseManager_SkillsDataLoaded;
 			FirebaseManager.SharedInstance.QuestsDataLoaded += FirebaseManager_QuestsDataLoaded;
+            FirebaseManager.SharedInstance.UserDataFailed += FirebaseManager_UserDataFailed;
+            FirebaseManager.SharedInstance.SkillsDataFailed += FirebaseManager_SkillsDataFailed;
+            FirebaseManager.SharedInstance.QuestsDataFailed += FirebaseManager_QuestsDataFailed;
 			//FirebaseManager.SharedInstance.CQuestsDataLoaded += FirebaseManager_CQuestsDataLoaded;
 			FirebaseManager.SharedInstance.LoadUserData ();
 		}
 
-		//private void FirebaseManager_CQuestsDataLoaded(object sender, CQuestsDataLoadedEvent e)
+		private void FirebaseManager_QuestsDataFailed(object sender, QuestsDataFailedEvent e)
+        {
+            showMessage("Warning", "cannot load user quests", this);
+        }
+
+        private void FirebaseManager_SkillsDataFailed(object sender, SkillsDataFailedEvent e)
+        {
+            showMessage("Warning", "cannot load user skills", this);
+        }
+
+        private void FirebaseManager_UserDataFailed(object sender, UserDataFailedEvent e)
+        {
+            showMessage("Warning", "cannot load user data", this);
+        }
+
+        //private void FirebaseManager_CQuestsDataLoaded(object sender, CQuestsDataLoadedEvent e)
 		//{
 		//    myUser.CompletedQuests = e.quests;
 		//}
-
+        void showMessage(string title, string message, UIViewController fromViewController)
+        {
+            var alert = UIAlertController.Create(title, message, UIAlertControllerStyle.Alert);
+            alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+            fromViewController.PresentViewController(alert, true, null);
+        }
 		private void FirebaseManager_QuestsDataLoaded (object sender, QuestsDataLoadedEvent e)
 		{
 			UserPersistanceClass.myUser.ActiveQuests = e.quests;

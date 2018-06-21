@@ -21,6 +21,9 @@ namespace PipboyOrganizer.DataAccess
         public event EventHandler<UserDataLoadedEvent> UserDataLoaded;
         public event EventHandler<SkillsDataLoadedEvent> SkillsDataLoaded;
         public event EventHandler<QuestsDataLoadedEvent> QuestsDataLoaded;
+        public event EventHandler<UserDataFailedEvent> UserDataFailed;
+        public event EventHandler<SkillsDataFailedEvent> SkillsDataFailed;
+        public event EventHandler<QuestsDataFailedEvent> QuestsDataFailed;
         //public event EventHandler<CQuestsDataLoadedEvent> CQuestsDataLoaded;
         #endregion
 
@@ -46,7 +49,8 @@ namespace PipboyOrganizer.DataAccess
                 UserDataLoaded.Invoke(this, e);
             }, (error) =>
             {
-                Console.WriteLine(error.LocalizedDescription);
+                var e = new UserDataFailedEvent(error.ToString());
+                UserDataFailed.Invoke(this, e);
             });
         }
 
@@ -87,6 +91,8 @@ namespace PipboyOrganizer.DataAccess
                 QuestsDataLoaded.Invoke(this, e);
             }, (error) =>
             {
+                var e = new QuestsDataFailedEvent(error.LocalizedDescription);
+                QuestsDataFailed.Invoke(this, e);
                 Console.WriteLine(error.LocalizedDescription);
             });
         }
@@ -155,6 +161,8 @@ namespace PipboyOrganizer.DataAccess
             }, (error) =>
             {
                 Console.WriteLine(error.LocalizedDescription);
+                var e = new SkillsDataFailedEvent(error.LocalizedDescription;
+                SkillsDataFailed.Invoke(this, e);
             });
         }
         #endregion
@@ -166,6 +174,7 @@ namespace PipboyOrganizer.DataAccess
         /// <param name="q">The quest you want to add</param>
         public void AddNewQuest(Quest q)
         {
+                
 
             //Quest Keys
             object[] questCreatedKeys = { "Description", "ExpiringDate", "Name", "QuestStages", "RewardXP", "StartDate", "Status", "isCompleted" };
@@ -236,6 +245,14 @@ namespace PipboyOrganizer.DataAccess
             quest = _quest;
         }
     }
+    public class QuestDataFailedEvent : EventArgs
+    {
+        public String e { get; private set; }
+        public QuestDataFailedEvent(String _e)
+        {
+            e = _e;
+        }
+    }
 
     public class StageDataLoadedEvent : EventArgs
     {
@@ -245,11 +262,26 @@ namespace PipboyOrganizer.DataAccess
             stage = _stage;
         }
     }
-
+    public class StageDataFailedEvent : EventArgs
+    {
+        public String e { get; private set; }
+        public StageDataFailedEvent(String _e)
+        {
+            e = _e;
+        }
+    }
     public class UserDataLoadedEvent : EventArgs{
         public User user { get; private set; }
         public UserDataLoadedEvent(User _user){
             user = _user;
+        }
+    }
+    public class UserDataFailedEvent : EventArgs
+    {
+        public String e { get; private set; }
+        public UserDataFailedEvent(String _e)
+        {
+            e = _e;
         }
     }
 
@@ -257,6 +289,14 @@ namespace PipboyOrganizer.DataAccess
         public List<Skill> skills { get; private set; }
         public SkillsDataLoadedEvent(List<Skill> _skills){
             skills = _skills;
+        }
+    }
+    public class SkillsDataFailedEvent : EventArgs
+    {
+        public String e { get; private set; }
+        public SkillsDataFailedEvent(String _e)
+        {
+            e = _e;
         }
     }
 
@@ -268,6 +308,14 @@ namespace PipboyOrganizer.DataAccess
             stages = _stages;
         }
     }
+    public class StagesDataFailedEvent : EventArgs
+    {
+        public String e { get; private set; }
+        public StagesDataFailedEvent(String _e)
+        {
+            e = _e;
+        }
+    }
 
     public class QuestsDataLoadedEvent : EventArgs
     {
@@ -275,6 +323,14 @@ namespace PipboyOrganizer.DataAccess
         public QuestsDataLoadedEvent(List<Quest> _quests)
         {
             quests = _quests;
+        }
+    }
+    public class QuestsDataFailedEvent : EventArgs
+    {
+        public String e { get; private set; }
+        public QuestsDataFailedEvent(String _e)
+        {
+            e = _e;
         }
     }
 
