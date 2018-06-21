@@ -100,12 +100,17 @@
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\VaultBoyImage.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\VaultBoyImage.imageset\iTunesArtwork%401x.png" />
+    <ImageAsset Include="Assets.xcassets\VaultBoyImage.imageset\iTunesArtwork%402x.png" />
+    <ImageAsset Include="Assets.xcassets\VaultBoyImage.imageset\iTunesArtwork%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Models\" />
     <Folder Include="Controllers\" />
     <Folder Include="Data Access\" />
+    <Folder Include="Assets.xcassets\VaultBoyImage.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
