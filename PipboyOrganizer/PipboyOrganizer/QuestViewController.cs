@@ -19,7 +19,8 @@ namespace PipboyOrganizer {
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
-
+            tblQuests.Delegate = this;
+            tblQuests.DataSource = this;
 		}
 
 		public override void PrepareForSegue (UIStoryboardSegue segue, NSObject sender)
@@ -69,7 +70,7 @@ namespace PipboyOrganizer {
 			//    throw ex;
 			//}
 
-			var cell = tableView.DequeueReusableCell ("MainTableViewCell", indexPath) as MainTableViewCell;
+            var cell = tableView.DequeueReusableCell ("MainTableViewCell", indexPath) as MainTableViewCell;
 			cell.QuestName = UserPersistanceClass.myUser.ActiveQuests [indexPath.Row].Name;
 			cell.QuestDescription = UserPersistanceClass.myUser.ActiveQuests [indexPath.Row].Description;
 
@@ -93,7 +94,7 @@ namespace PipboyOrganizer {
 
 		public nint RowsInSection (UITableView tableView, nint section)
 		{
-			return 1;
+            return UserPersistanceClass.myUser.ActiveQuests.Count;
 		}
 
 

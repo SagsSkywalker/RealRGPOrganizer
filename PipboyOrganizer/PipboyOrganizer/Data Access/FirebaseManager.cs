@@ -164,7 +164,7 @@ namespace PipboyOrganizer.DataAccess
         /// Adds the new quest to User's Active quests.
         /// </summary>
         /// <param name="q">The quest you want to add</param>
-        public void AddNewQuest(Quest q)
+        public void AddNewQuest(Quest q, int questID)
         {
 
             //Quest Keys
@@ -186,12 +186,12 @@ namespace PipboyOrganizer.DataAccess
             var questCreatedFinal = NSDictionary.FromObjectsAndKeys(questCreatedValues, questCreatedKeys, questCreatedKeys.Length);
             //int questNumber = int.Parse(userNode.GetChild("ActiveQuests").GetChild("Counter").obse)
             //Create quest node and add Quest data.
-            userNode.GetChild("ActiveQuests").GetChild("Quest02").SetValue<NSDictionary>(questCreatedFinal);
+            userNode.GetChild("ActiveQuests").GetChild($"Quest{questID}").SetValue<NSDictionary>(questCreatedFinal);
             //Create stage node and add Stage data.
             int cont = 0;
             foreach (var stage in stages)
             {
-                userNode.GetChild("ActiveQuests").GetChild("Quest02").GetChild("QuestStages").GetChild($"Stage{cont++}").SetValue<NSDictionary>(stage);
+                userNode.GetChild("ActiveQuests").GetChild($"Quest{questID}").GetChild("QuestStages").GetChild($"Stage{cont++}").SetValue<NSDictionary>(stage);
             }
         }
 
