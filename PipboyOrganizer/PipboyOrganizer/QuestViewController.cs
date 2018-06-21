@@ -90,7 +90,7 @@ namespace PipboyOrganizer
             }
             else if (tableView.Tag == 20)
             {
-                return ;
+                return 3;
             }
             return 1;
         }
